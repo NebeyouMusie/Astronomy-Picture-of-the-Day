@@ -5,7 +5,8 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { APODCard } from "@/components/APODCard";
 import { APODDialog } from "@/components/APODDialog";
 import { SearchForm } from "@/components/SearchForm";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const Index = () => {
   const { toast } = useToast();
@@ -15,15 +16,8 @@ const Index = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: ["apod", searchParams],
     queryFn: () => fetchAPOD(searchParams),
+    retry: false,
   });
-
-  if (error) {
-    toast({
-      variant: "destructive",
-      title: "Error",
-      description: "Failed to fetch APOD data. Please try again.",
-    });
-  }
 
   const images = Array.isArray(data) ? data : data ? [data] : [];
 
@@ -45,6 +39,14 @@ const Index = () => {
           </div>
 
           <SearchForm onSearch={setSearchParams} />
+
+          {error && (
+            <Alert variant="destructive">
+              <AlertDescription>
+                {error instanceof Error ? error.message : "Failed to fetch APOD data. Please try again."}
+              </AlertDescription>
+            </Alert>
+          )}
 
           {isLoading ? (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
