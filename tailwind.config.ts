@@ -10,6 +10,9 @@ export default {
   ],
   prefix: "",
   theme: {
+    fontFamily: {
+      'sans': ['Poppins', 'ui-sans-serif', 'system-ui'],
+    },
     container: {
       center: true,
       padding: "2rem",
